@@ -16,6 +16,9 @@ public class RectGenerator : MonoBehaviour
 
     public RectangleSlide rect;
 
+    public bool isMoving;
+    private bool isOn;
+
     [Range(3, 15)]
     public float maxRand;
 
@@ -25,14 +28,19 @@ public class RectGenerator : MonoBehaviour
         limitLeft = GameObject.FindGameObjectWithTag("LimitLeft").transform;
         time = 0.86f;
         end = false;
-        //rect = Resources.Load<RectangleSlide>("Prefabs/Rectangle.prefab");
-        StartCoroutine("RectGeneration");
+        isMoving = false;
+        isOn = false;
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+       if(isMoving && !isOn)
+        {
+            StartCoroutine(RectGeneration());
+            isOn = true;
+        }
     }
 
     public IEnumerator RectGeneration()
@@ -88,6 +96,11 @@ public class RectGenerator : MonoBehaviour
     {
         Color color = GetColor();
         rectSlide.GetComponent<SpriteRenderer>().color = color;
+    }
+
+    public void StopGeneration()
+    {
+        end = true;
     }
 }
 

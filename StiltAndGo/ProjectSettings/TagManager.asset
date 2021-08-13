@@ -7,6 +7,9 @@ TagManager:
   - Rect
   - LimitLeft
   - LimitRight
+  - Generator
+  - Init
+  - Stilt
   layers:
   - Default
   - TransparentFX
