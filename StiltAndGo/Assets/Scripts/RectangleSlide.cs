@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class RectangleSlide : MonoBehaviour
 {
-    [Range(1, 10)]
-    public float speed;
+    public static float Speed { get; set; }
 
     private Transform limitRight;
 
@@ -26,7 +25,7 @@ public class RectangleSlide : MonoBehaviour
     private void UpdatePosition()
     {
         Vector3 pos = this.transform.position;
-        pos.x -= speed*Time.deltaTime;
+        pos.x -= Speed*Time.deltaTime;
         this.transform.position = pos;
     }
 

@@ -6,7 +6,7 @@ public class InitRectMove : MonoBehaviour
 {
     public bool isMoving;
 
-    [Range(1, 10)]
+    [Range(1, 150)]
     public float speed;
     // Start is called before the first frame update
     void Start()
