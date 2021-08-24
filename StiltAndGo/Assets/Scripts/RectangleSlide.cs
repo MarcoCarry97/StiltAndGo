@@ -41,4 +41,10 @@ public class RectangleSlide : MonoBehaviour
         if (collision.tag.Equals("LimitLeft"))
             Destroy(this.gameObject);
     }
+
+    private void OnDestroy()
+    {
+        GameState.Instance.AddPoints(100);
+
+    }
 }

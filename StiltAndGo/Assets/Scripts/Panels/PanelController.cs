@@ -5,17 +5,20 @@ using UnityEngine;
 
 public class PanelController : MonoBehaviour
 {
-    public Dictionary<string,Panel> panels;
+    public List<Panel> panels;
 
-    private PanelController instance;
+    private PanelStack stack;
 
-    public PanelController Instance
+    private static PanelController instance;
+
+    private Canvas canvas;
+    public static PanelController Instance
     {
         get
         { 
             if(instance==null)
             {
-                instance = new GameObject().AddComponent<PanelController>();
+                instance = new GameObject("PanelController").AddComponent<PanelController>();
             }
             return instance;
         } 
@@ -27,17 +30,34 @@ public class PanelController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        DontDestroyOnLoad(this);
+        instance = this;
+        DontDestroyOnLoad(this.transform.parent);
+        stack = new PanelStack();
+        canvas = this.transform.parent.GetComponent<Canvas>();
     }
 
     public void ActivePanel(string name)
     {
-        panels[name].Active();
+        int index = -1;
+        for(int i=0;i<panels.Count;i++)
+            if (panels[i].name.Equals(name))
+                index = i;
+        Panel p = GameObject.Instantiate(panels[index],this.transform.parent);
+        p.name = panels[index].name;
+        
+        p.transform.SetParent(this.transform.parent);
+        
+        stack.Push(p);
     }
 
-    public void DeactivePanel(string name)
+    public void DeactivePanel()
     {
-        panels[name].Deactive();
+        stack.Pop();
+    }
+
+    public void Clear()
+    {
+        stack.Clear();
     }
 
 }

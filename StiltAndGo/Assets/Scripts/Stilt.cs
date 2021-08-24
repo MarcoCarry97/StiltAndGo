@@ -40,5 +40,17 @@ public class Stilt : MonoBehaviour
         isCollided = true;
     }
 
-    
+    private void OnDestroy()
+    {
+        GameState.Instance.ShowGameOver();
+        GameState.Instance.GameOver = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        GameObject g = collision.gameObject;
+        if (g.tag.Equals("LimitLeft") || g.tag.Equals("LimitRight"))
+            Destroy(this.gameObject);
+    }
+
 }

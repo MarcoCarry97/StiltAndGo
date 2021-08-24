@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class GameState : MonoBehaviour
 {
-    private GameState instance;
+    private static GameState instance;
 
-    public GameState Instance
+    private PanelController panelController;
+
+    public int Points { get; private set; }
+
+    public bool GameOver { get; set; }
+    public static GameState Instance
     {
         get
         {
             if (instance == null)
-                instance = new GameObject().AddComponent<GameState>();
+                instance = new GameObject("GameState").AddComponent<GameState>();
             return instance;
         }
     }
@@ -19,12 +24,38 @@ public class GameState : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        instance = this;
+        DontDestroyOnLoad(this.gameObject);
+        panelController = PanelController.Instance;
+        Points = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void ShowStart()
+    {
+        panelController.ActivePanel("StartPanel");
+    }
+
+    public void ShowGameOver()
+    {
+        panelController.ActivePanel("GameOverPanel");
+    }
+
+    public void Reload()
+    {
+        Points = 0;
+        GameOver = false;
+        panelController.Clear();
+    }
+
+    public void AddPoints(int num)
+    {
+        if(!GameOver)
+            Points += num;
     }
 }

@@ -30,8 +30,6 @@ public class RectGenerator : MonoBehaviour
 
     private int count;
 
-    private bool isFirstRect;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -40,7 +38,6 @@ public class RectGenerator : MonoBehaviour
         end = false;
         isMoving = false;
         isOn = false;
-        isFirstRect = true;
     }
 
     // Update is called once per frame
@@ -51,7 +48,6 @@ public class RectGenerator : MonoBehaviour
             StartCoroutine(RectGeneration());
             isOn = true;
         }
-        print(count+" "+lastRect);
     }
 
     public IEnumerator RectGeneration()
