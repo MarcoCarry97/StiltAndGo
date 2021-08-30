@@ -1,0 +1,4 @@
+{"msg":"init","dagFile":"artifacts\\tundra.dag","targets":[]}
+{"msg":"newNode","annotation":"WriteResponseFile artifacts/rsp/7190899199599568882.rsp","index":1}
+{"msg":"noderesult","annotation":"WriteResponseFile artifacts/rsp/7190899199599568882.rsp","index":1,"exitcode":0}
+{"msg":"newNode","annotation":"Il2Cpp D:/Progetti/Unity/stiltandgo/stiltandgo/StiltAndGo/Library/Il2cppBuildCache/WebGL/Native/build.bc","index":2}

@@ -10,6 +10,9 @@ TagManager:
   - Generator
   - Init
   - Stilt
+  - GameView
+  - StartPanel
+  - GameState
   layers:
   - Default
   - TransparentFX
