@@ -4,18 +4,12 @@ using UnityEngine;
 
 public class PanelStack
 {
-    private Stack<Panel> stack;
-    private Stack<string> names;
-
-    public PanelStack()
-    {
-        stack = new Stack<Panel>();
-        names = new Stack<string>();
-    }
+   private Stack<Panel> stack;
+   private Stack<string> names;
 
     public void Push(Panel p)
     {
-        if(stack.Count>=1)
+        if (stack.Count >= 1)
         {
             Panel top = stack.Pop();
             top.Deactive();
@@ -30,9 +24,9 @@ public class PanelStack
     {
         if (stack.Count >= 1)
         {
-            Panel p=stack.Pop();
+            Panel p = stack.Pop();
             names.Pop();
-            if(stack.Count!=0)
+            if (stack.Count != 0)
             {
                 Panel top = stack.Pop();
                 top.Active();
@@ -40,12 +34,12 @@ public class PanelStack
             }
             GameObject.Destroy(p.gameObject);
         }
-        
+
     }
 
     public void Clear()
     {
-        while(stack.Count!=0)
+        while (stack.Count != 0)
         {
             Pop();
         }

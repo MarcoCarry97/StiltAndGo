@@ -21,15 +21,10 @@ public class StartPanel : Panel
 
     private void OnPressed()
     {
-        RectGenerator generator = GameObject.FindGameObjectWithTag("Generator").GetComponent<RectGenerator>();
-        InitRectMove init = GameObject.FindGameObjectWithTag("Init").GetComponent<InitRectMove>();
-        if(generator!=null && init!=null)
-        {
-            init.isMoving = generator.isMoving = true;
-            inGame = true;
-            GameState.Instance.ShowGamePanel();
-            Debug.LogError("STARTED");
-        }
+        RectGenerator generator = GameObject.FindGameObjectWithTag("Generator")
+            .GetComponent<RectGenerator>();
+        generator.SetState(RectGenerator.GenState.Play);
+        GameState.Instance.ShowGamePanel();
     }
 
     // Update is called once per frame

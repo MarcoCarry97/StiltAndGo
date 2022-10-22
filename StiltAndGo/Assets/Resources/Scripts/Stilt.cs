@@ -2,60 +2,90 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(CircleCollider2D))]
 public class Stilt : MonoBehaviour
 {
-    private Rigidbody2D rigidBody;
+    public enum StiltState
+    {
+        Ground,
+        Air
+    }
 
-    [Range(1, 20)]
-    public float force;
-    
-    public bool isCollided;
+    private StiltState _state;
+    private Rigidbody2D _rigidBody;
+    private InputController _controller;
 
-    public float Effects;
+    public Vector3 direction;
+    public bool highJump;
 
-    public int Life { get; set; }
+    [Range(1, 1000)]
+    public float vertSpeed;
 
-    public bool Jump { get; set; }
+    [Range(1, 1000)]
+    public float acceleration;
+
+    [Range(1, 1000)]
+    public float horizSpeed;
+
+    private float _multiplier;
+
+    private float _velocity;
+    private Vector2 _currentVelocity;
+    private float _distance;
 
     // Start is called before the first frame update
     void Start()
     {
-        rigidBody = GetComponent<Rigidbody2D>();
-        isCollided = false;
-        Effects = 0;
-        Life = 3;
+        highJump = false;
+        _state = StiltState.Air;
+        _rigidBody=this.GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
+    void Update()
+    {
+        print(_state);
+        switch(_state)
+        {
+            case StiltState.Ground: _GroundState(); break;
+            case StiltState.Air: _AirState(); break;
+        }
+    }
+
     private void FixedUpdate()
     {
-        if(isCollided)
+        if(_state == StiltState.Ground)
         {
-            Vector2 jumpVector = Vector2.up * ((force * 50)+Effects*7.5f);
-            if (Jump) jumpVector *= 1.5f;
-            rigidBody.AddForce(jumpVector);
-            isCollided = false;
+            _rigidBody.AddForce(Vector3.up * vertSpeed*_multiplier);
+            _state=StiltState.Air;
         }
+    }
+
+    private void _GroundState()
+    {
+        if (highJump) _multiplier = 1.5f;
+        else _multiplier = 1;
+        //highJump = false;
+    }
+
+    private void _AirState()
+    {
+        print(_multiplier);
+        _rigidBody.AddForce(direction * horizSpeed);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //rigidBody.AddForce(Vector2.up * force*50);
-        isCollided = true;
+        if (collision.collider.tag.Equals("Rectangle"))
+        {
+            _state = StiltState.Ground;
+        }
     }
 
-    
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionExit2D(Collision2D collision)
     {
-        GameObject g = collision.gameObject;
-        if (g.tag.Equals("LimitLeft"))
-            Destroy(this.gameObject);
-        else if (g.tag.Equals("LimitRight"))
-            Destroy(this.gameObject);
+        if (collision.collider.tag.Equals("Rectangle"))
+        {
+           _state= StiltState.Air;
+        }
     }
-
-
 }
