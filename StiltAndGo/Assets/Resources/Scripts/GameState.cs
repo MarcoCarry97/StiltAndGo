@@ -91,24 +91,16 @@ public class GameState : MonoBehaviour
     }
 
     public void ActivePanel(string name)
-    {
-        try
-        {
-            int index = -1;
-            for (int i = 0; i < panels.Count; i++)
-                if (panels[i].name.Equals(name))
-                    index = i;
-            Panel p = GameObject.Instantiate(panels[index], this.transform.parent);
-            p.name = panels[index].name;
-
-            p.transform.SetParent(this.transform.parent);
-            print(p);
-            stack.Push(p);
-        }
-        catch (NullReferenceException e)
-        {
-            Debug.LogError(e.Message);
-        }
+    {    
+        int index = -1;
+        for (int i = 0; i < panels.Count; i++)
+            if (panels[i].name.Equals(name))
+                index = i;
+          
+        Panel p = GameObject.Instantiate(panels[index], this.transform.parent);
+        p.name = panels[index].name;
+        p.gameObject.transform.SetParent(this.gameObject.transform.parent);
+        stack.Push(p);
     }
 
     public void DeactivePanel()
@@ -149,10 +141,10 @@ public class GameState : MonoBehaviour
             Points += num;
     }
 
-    public void AddLife(int num)
+    public void AddLife(uint num)
     {
         if (state != State.GameOver)
-            Life = min(Life+num, 3);
+            Life = min(Life+((int)num), 3);
     }
 
     private int min(int a, int b)

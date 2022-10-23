@@ -1,11 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PanelStack
 {
    private Stack<Panel> stack;
    private Stack<string> names;
+
+    public PanelStack()
+    {
+        stack = new Stack<Panel>();
+        names=new Stack<string>(){};
+    }
 
     public void Push(Panel p)
     {
