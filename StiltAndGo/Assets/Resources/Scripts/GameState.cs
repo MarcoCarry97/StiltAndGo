@@ -63,7 +63,8 @@ public class GameState : MonoBehaviour
 
     private void StartState()
     {
-        if(!showStart)
+        RectGenerator gen=GameObject.FindObjectOfType<RectGenerator>();
+        if(!showStart && gen.GetState().Equals(RectGenerator.GenState.Normal))
         {
             ShowStart();
             showStart = true;
@@ -97,9 +98,14 @@ public class GameState : MonoBehaviour
             if (panels[i].name.Equals(name))
                 index = i;
           
+<<<<<<< HEAD
+        Panel p = GameObject.Instantiate(panels[index],this.gameObject.transform);
+        p.name = panels[index].name;
+=======
         Panel p = GameObject.Instantiate(panels[index], this.transform.parent);
         p.name = panels[index].name;
         p.gameObject.transform.SetParent(this.gameObject.transform.parent);
+>>>>>>> 79f425464fa4f07ff87df16d038c264677c1a28a
         stack.Push(p);
     }
 
