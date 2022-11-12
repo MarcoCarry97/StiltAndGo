@@ -505,7 +505,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panels:
-  - {fileID: 989040252189055521, guid: d74c77b46171f6249932a21a9f8a69f5, type: 3}
+  - {fileID: -8476600539519552046, guid: d74c77b46171f6249932a21a9f8a69f5, type: 3}
 --- !u!1 &1020745632
 GameObject:
   m_ObjectHideFlags: 0
