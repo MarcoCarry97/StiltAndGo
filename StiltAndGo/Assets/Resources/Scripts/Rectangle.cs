@@ -13,8 +13,11 @@ public class Rectangle : MonoBehaviour
 
     private Rigidbody2D _rigidBody;
 
+    private Vector3 originalScale;
+
     void Start()
     {
+        originalScale = transform.localScale;
         _ready= true;
         _rigidBody = this.GetComponent<Rigidbody2D>();
     }
@@ -37,7 +40,9 @@ public class Rectangle : MonoBehaviour
                 .GetComponent<RectGenerator>();
             if (gen.GetState() == RectGenerator.GenState.Init)
                 gen.SetState(RectGenerator.GenState.Normal);
-            Destroy(this.gameObject);
+            this.gameObject.SetActive(false);
+            this.transform.localScale = originalScale;
+            gen.Add(this);
         }
     }
 

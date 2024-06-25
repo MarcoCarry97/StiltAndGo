@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Services.Core;
 using UnityEngine;
+using System.Linq;
 using Random = UnityEngine.Random;
+using ToolBox.Core;
 
 public class RectGenerator : MonoBehaviour
 {
@@ -16,6 +17,12 @@ public class RectGenerator : MonoBehaviour
         End
     }
 
+    [SerializeField]
+    [Range(10,100)]
+    private int numOfRectanglesOnScene = 10;
+
+    private List<Rectangle> rectanglesInScene;
+
     private GenState _state;
     private Collider2D _left;
     private Collider2D _right;
@@ -25,6 +32,9 @@ public class RectGenerator : MonoBehaviour
 
     private bool _playerGenerated;
 
+
+    public int Points { get; private set; }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +43,8 @@ public class RectGenerator : MonoBehaviour
         _left = GameObject.FindGameObjectWithTag("LimitLeft").GetComponent<Collider2D>();
         _right = GameObject.FindGameObjectWithTag("LimitRight").GetComponent<Collider2D>();
         _rect = Resources.Load<GameObject>("Prefabs/Rectangle");
+        checkListOfRect();
+        generateRectangles();
     }
 
     // Update is called once per frame
@@ -48,12 +60,43 @@ public class RectGenerator : MonoBehaviour
         }
     }
 
+    private void checkListOfRect()
+    {
+        if (rectanglesInScene != null)
+        {
+            if (rectanglesInScene.Count > 0)
+            {
+                for(int i=0;i<rectanglesInScene.Count;i++)
+                {
+                    Rectangle rectangle = rectanglesInScene[i];
+                    rectanglesInScene.Remove(rectangle);
+                    Destroy(rectangle);
+                }
+            }
+        }
+    }
+
+    private void generateRectangles()
+    {
+        rectanglesInScene = new List<Rectangle>();
+        for (int i = 0; i < numOfRectanglesOnScene; i++)
+        {
+            GameObject game = Instantiate(_rect);
+            Rectangle rectangle= game.GetComponent<Rectangle>();
+            game.SetActive(false);
+            rectanglesInScene.Push(rectangle);
+        }
+    }
+
     private void _FirstState()
     {
         Vector3 pos = _right.transform.position;
         Quaternion rot = _right.transform.rotation;
         pos.y -= 5;
-        _last = Instantiate<GameObject>(_rect, pos, rot).GetComponent<Rectangle>();
+        _last = rectanglesInScene.Pop();
+        _last.gameObject.SetActive(true);
+        _last.transform.position = pos;
+        _last.transform.rotation = rot;
         _state= GenState.Init;
     }
 
@@ -63,18 +106,22 @@ public class RectGenerator : MonoBehaviour
         Vector3 pos =next.transform.position;
         Quaternion rot =next.transform.rotation;
         pos.x += 0.05f;
-        if (pos.x <= _right.transform.position.x)
+        if(pos.x < _right.transform.position.x)
         {
-            _last = Instantiate<GameObject>(_rect, pos, rot).GetComponent<Rectangle>();
+            _last = rectanglesInScene.Pop();
+            _last.gameObject.SetActive(true);
+            _last.transform.position = pos;
+            _last.transform.rotation = rot;
         }
     }
 
     private void _NormalState()
     {
         _InitState();
+        
     }
 
-    private void _GeneratePlayer()
+    private void GeneratePlayer()
     {
         if(!_playerGenerated)
         {
@@ -83,6 +130,7 @@ public class RectGenerator : MonoBehaviour
             Quaternion rot = this.transform.rotation;
             Instantiate(player, pos, rot);
             _playerGenerated = true;
+            
         }
     }
 
@@ -93,18 +141,28 @@ public class RectGenerator : MonoBehaviour
 
     private void _PlayState()
     {
+        GeneratePlayer();
         Transform next = _last.Next();
         Vector3 pos = next.transform.position;
         Quaternion rot = next.transform.rotation;
         pos.x += 0.05f;
-        if (pos.x <= _right.transform.position.x)
+        if (pos.x < _right.transform.position.x)
         {
-            _last = Instantiate<GameObject>(_rect, pos, rot).GetComponent<Rectangle>();
-            float size = Random.Range(0, _rect.transform.localScale.y*1.5f);
-            Vector3 locScale = _last.transform.localScale;
-            locScale.y += size;
-            _last.transform.localScale = locScale;
+            Vector3 scale = _last.transform.localScale;
+            float num = Random.Range(5,20);
+            _last = rectanglesInScene.Pop();
+            _last.gameObject.SetActive(true);
+            _last.transform.position = pos;
+            _last.transform.rotation = rot;
+            
+            scale.y = num;
+            _last.transform.localScale = scale;
         }
+    }
+
+    public void Add(Rectangle rectangle)
+    {
+        rectanglesInScene.Add(rectangle);
     }
 
     public GenState GetState()
@@ -115,5 +173,10 @@ public class RectGenerator : MonoBehaviour
     public void SetState(GenState state)
     {
         _state = state;
+    }
+
+    public void AddPoints()
+    {
+        Points += 100;
     }
 }

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using ToolBox.Control.Explorer2D;
+using ToolBox.Core;
 using UnityEngine;
 
 public class Stilt : MonoBehaviour
@@ -11,33 +13,20 @@ public class Stilt : MonoBehaviour
     }
 
     private StiltState _state;
-    private Rigidbody2D _rigidBody;
-    private InputController _controller;
 
-    public Vector3 direction;
+    private CharacterController2D _controller;
+
+
     public bool highJump;
 
-    [Range(1, 1000)]
-    public float vertSpeed;
-
-    [Range(1, 1000)]
-    public float acceleration;
-
-    [Range(1, 1000)]
-    public float horizSpeed;
-
-    private float _multiplier;
-
-    private float _velocity;
-    private Vector2 _currentVelocity;
-    private float _distance;
 
     // Start is called before the first frame update
     void Start()
     {
         highJump = false;
         _state = StiltState.Air;
-        _rigidBody=this.GetComponent<Rigidbody2D>();
+
+        _controller = this.GetComponent<CharacterController2D>();
     }
 
     // Update is called once per frame
@@ -55,22 +44,23 @@ public class Stilt : MonoBehaviour
     {
         if(_state == StiltState.Ground)
         {
-            _rigidBody.AddForce(Vector3.up * vertSpeed*_multiplier);
+            //_rigidBody.AddForce(Vector3.up * vertSpeed*_multiplier);
             _state=StiltState.Air;
         }
     }
 
     private void _GroundState()
     {
-        if (highJump) _multiplier = 1.5f;
-        else _multiplier = 1;
+        //if (highJump) _multiplier = 1.5f;
+        //else _multiplier = 1;
         //highJump = false;
+        _controller.Jump(true);
     }
 
     private void _AirState()
     {
-        print(_multiplier);
-        _rigidBody.AddForce(direction * horizSpeed);
+        //_rigidBody.AddForce(direction * horizSpeed);
+        _controller.Jump(false);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -78,7 +68,10 @@ public class Stilt : MonoBehaviour
         if (collision.collider.tag.Equals("Rectangle"))
         {
             _state = StiltState.Ground;
+            RectGenerator rectGen=GameObject.FindObjectOfType<RectGenerator>();
+            rectGen.AddPoints();
         }
+        
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -88,4 +81,14 @@ public class Stilt : MonoBehaviour
            _state= StiltState.Air;
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag.Equals("LimitLeft"))
+        {
+            Destroy(this.gameObject);
+            GameController.Instance.Gui.ActivePanel("GameOverPanel");
+        }
+    }
+
 }

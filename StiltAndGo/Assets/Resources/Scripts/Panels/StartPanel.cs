@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ToolBox.Control.Explorer2D;
+using ToolBox.Core;
+using ToolBox.GUI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,12 +27,13 @@ public class StartPanel : Panel
         RectGenerator generator = GameObject.FindGameObjectWithTag("Generator")
             .GetComponent<RectGenerator>();
         generator.SetState(RectGenerator.GenState.Play);
-        GameState.Instance.ShowGamePanel();
+        GameController.Instance.Gui.ActivePanel("GamePanel");
+        GameController.Instance.Commands.SetState(InputController.State.CharacterControl);
     }
 
     // Update is called once per frame
     void Update()
     {
-        this.gameObject.SetActive(!inGame);
+        
     }
 }
