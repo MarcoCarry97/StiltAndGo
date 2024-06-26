@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class StartPanel : Panel
 {
     public Button startButton;
+    public Button quitButton;
 
     private bool inGame;
 
@@ -18,17 +19,24 @@ public class StartPanel : Panel
     void Start()
     {
         startButton = this.transform.GetChild(1).GetComponent<Button>();
-        startButton.onClick.AddListener(OnPressed);
+        quitButton = this.transform.GetChild(2).GetComponent<Button>();
+        startButton.onClick.AddListener(OnStart);
+        quitButton.onClick.AddListener(OnQuit);
         inGame = false;
     }
 
-    private void OnPressed()
+    private void OnStart()
     {
         RectGenerator generator = GameObject.FindGameObjectWithTag("Generator")
             .GetComponent<RectGenerator>();
         generator.SetState(RectGenerator.GenState.Play);
         GameController.Instance.Gui.ActivePanel("GamePanel");
         GameController.Instance.Commands.SetState(InputController.State.CharacterControl);
+    }
+
+    private void OnQuit()
+    {
+        Application.Quit();
     }
 
     // Update is called once per frame

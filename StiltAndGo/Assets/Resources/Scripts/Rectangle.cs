@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ToolBox.Control.Explorer2D;
 using UnityEngine;
 
 public class Rectangle : MonoBehaviour
@@ -11,7 +12,7 @@ public class Rectangle : MonoBehaviour
 
     private bool _ready = false;
 
-    private Rigidbody2D _rigidBody;
+    private Rigidbody2D rigidbody;
 
     private Vector3 originalScale;
 
@@ -19,17 +20,17 @@ public class Rectangle : MonoBehaviour
     {
         originalScale = transform.localScale;
         _ready= true;
-        _rigidBody = this.GetComponent<Rigidbody2D>();
+        rigidbody = this.GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         Vector3 vector = new Vector3(speed*3.5f, 0,0);
-        vector *= Time.deltaTime*-1;
+        vector *= Time.fixedDeltaTime*-1;
         Vector3 pos = this.transform.position;
         //_rigidBody.velocity = vector;
-        _rigidBody.MovePosition(pos+vector);
+        rigidbody.MovePosition(pos+vector);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

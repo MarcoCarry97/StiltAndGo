@@ -18,7 +18,7 @@ public class RectGenerator : MonoBehaviour
     }
 
     [SerializeField]
-    [Range(10,100)]
+    [Range(10, 100)]
     private int numOfRectanglesOnScene = 10;
 
     private List<Rectangle> rectanglesInScene;
@@ -32,12 +32,20 @@ public class RectGenerator : MonoBehaviour
 
     private bool _playerGenerated;
 
+    private List<Color> colours;
 
     public int Points { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
+        colours = new List<Color>();
+        colours.Add(Color.white);
+        colours.Add(Color.black);
+        colours.Add(Color.red);
+        colours.Add(Color.green);
+        colours.Add(Color.blue);
+        colours.Add(Color.yellow);
         _playerGenerated = false;
         _state=GenState.First;
         _left = GameObject.FindGameObjectWithTag("LimitLeft").GetComponent<Collider2D>();
@@ -85,6 +93,8 @@ public class RectGenerator : MonoBehaviour
             Rectangle rectangle= game.GetComponent<Rectangle>();
             game.SetActive(false);
             rectanglesInScene.Push(rectangle);
+
+
         }
     }
 
@@ -105,13 +115,14 @@ public class RectGenerator : MonoBehaviour
         Transform next = _last.Next();
         Vector3 pos =next.transform.position;
         Quaternion rot =next.transform.rotation;
-        pos.x += 0.05f;
+        //pos.x += 0.05f;
         if(pos.x < _right.transform.position.x)
         {
             _last = rectanglesInScene.Pop();
             _last.gameObject.SetActive(true);
             _last.transform.position = pos;
             _last.transform.rotation = rot;
+            FillRectOfColour(_last);
         }
     }
 
@@ -149,15 +160,21 @@ public class RectGenerator : MonoBehaviour
         if (pos.x < _right.transform.position.x)
         {
             Vector3 scale = _last.transform.localScale;
-            float num = Random.Range(5,20);
+            float num = Random.Range(5,15);
             _last = rectanglesInScene.Pop();
             _last.gameObject.SetActive(true);
             _last.transform.position = pos;
             _last.transform.rotation = rot;
-            
+            FillRectOfColour(_last);
             scale.y = num;
             _last.transform.localScale = scale;
         }
+    }
+
+    private void FillRectOfColour(Rectangle rect)
+    {
+        SpriteRenderer renderer = rect.GetComponent<SpriteRenderer>();
+        renderer.color = colours[Random.RandomRange(0, colours.Count)];
     }
 
     public void Add(Rectangle rectangle)

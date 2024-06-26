@@ -81,7 +81,7 @@ namespace ToolBox.Control.Explorer2D
                 print(direction + " " + HighJump);
                 CharacterController2D control = game.GetComponent<CharacterController2D>();
                 control.Move(direction);
-                control.HighJump(Input.GetButtonDown("Jump"));
+                control.HighJump(Input.GetButton("Jump"));
                 //game.GetComponent<AnimatorController>().SetDirection(direction);
                 Direction = direction;
             }

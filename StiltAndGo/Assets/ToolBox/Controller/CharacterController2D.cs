@@ -18,7 +18,9 @@ namespace ToolBox.Control.Explorer2D
 
         private Rigidbody2D rigidBody;
 
-        new private CircleCollider2D collider;
+        new private Collider2D collider;
+
+        private bool grounded;
 
         private Vector3 velocity;
 
@@ -62,12 +64,15 @@ namespace ToolBox.Control.Explorer2D
         private void Start()
         {
             rigidBody = GetComponent<Rigidbody2D>();
-            collider = GetComponent<CircleCollider2D>();
+            collider = GetComponent<Collider2D>();
             velocity = Vector3.zero;
+            grounded = false;
         }
 
         private void Update()
         {
+            print("Velocity: "+velocity);
+            print("High jump: " + highJump);
             ComputeVelocityX();
             ComputeVelocityY();
         }
@@ -86,22 +91,32 @@ namespace ToolBox.Control.Explorer2D
 
         private void ComputeVelocityY()
         {
+            int highJumpMultiplier = highJump ? 4 : 2;
             Vector3 gravityVector = Physics2D.gravity*rigidBody.mass;
-            if(jump)
+            if (jump)
             {
-                int highJumpMultiplier = highJump ? 4 : 2;
                 velocity.y = Mathf.Sqrt(highJumpMultiplier * jumpHeigh * Math.Abs(gravityVector.y));
-                if (highJump)
-                    velocity.y *= 2;
-
             }
+            if (highJump && grounded)
+                velocity.y *= 2;
             velocity.y += gravityVector.y * Time.deltaTime;
         }
 
         private void AdjustPosition()
         {
-            List<Collider2D> colliders= Physics2D.OverlapCircleAll(transform.position, collider.radius, 0).ToList<Collider2D>();
-            foreach(Collider2D hit in colliders)
+            List<Collider2D> colliders;
+            if(collider is CircleCollider2D)
+            {
+                CircleCollider2D circle=collider as CircleCollider2D;
+                colliders = Physics2D.OverlapCircleAll(transform.position, circle.radius, 0).ToList<Collider2D>();
+            }
+            else
+            {
+
+                BoxCollider2D box = collider as BoxCollider2D;
+                colliders = Physics2D.OverlapCircleAll(transform.position, box.size.x, 0).ToList<Collider2D>();
+            }
+            foreach (Collider2D hit in colliders)
             {
                 if(hit!=collider)
                 {
@@ -112,8 +127,18 @@ namespace ToolBox.Control.Explorer2D
                         Vector2 pos = rigidBody.position + vector;
                         rigidBody.MovePosition(pos);
                     }
+                    if (Vector2.Angle(distance.normal, Vector2.up) < 90 && velocity.y < 0)
+                    {
+                        grounded = true;
+                    }
+                    else grounded = false;
                 }
             }
+        }
+
+        public bool IsGrounded()
+        {
+            return grounded;
         }
 
         private void FixedUpdate()

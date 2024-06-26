@@ -29,6 +29,7 @@ namespace ToolBox.Core
 
         private void Start()
         {
+            Screen.orientation = ScreenOrientation.LandscapeLeft;
             DontDestroyOnLoad(this.gameObject);
             Gui = this.GetComponent<PanelController>();
             Commands = this.GetComponent<InputController>();
