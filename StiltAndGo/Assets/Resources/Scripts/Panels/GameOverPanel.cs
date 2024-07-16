@@ -5,6 +5,7 @@ using TMPro;
 using ToolBox.Core;
 using ToolBox.GUI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -17,6 +18,8 @@ public class GameOverPanel : Panel
 
     private GameController state;
 
+    private EventSystem eventSystem;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +27,8 @@ public class GameOverPanel : Panel
         button.onClick.AddListener(OnTryAgain);
         state = GameController.Instance;
         pointsView = this.transform.GetChild(1).GetComponent<TMP_Text>();
+        eventSystem = GameObject.FindObjectOfType<EventSystem>();
+        eventSystem.SetSelectedGameObject(button.gameObject);
     }
 
     private void OnTryAgain()

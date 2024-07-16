@@ -47,6 +47,7 @@ namespace ToolBox.Control.Explorer2D
         // Update is called once per frame
         void Update()
         {
+            print("Input controller state: " + state);
             switch (state)
             {
                 case State.CharacterControl:
@@ -78,7 +79,7 @@ namespace ToolBox.Control.Explorer2D
             GameObject game = GameObject.FindGameObjectWithTag("MainCharacter");
             if (game != null)
             {
-                print(direction + " " + HighJump);
+                print(direction);
                 CharacterController2D control = game.GetComponent<CharacterController2D>();
                 control.Move(direction);
                 control.HighJump(Input.GetButton("Jump"));

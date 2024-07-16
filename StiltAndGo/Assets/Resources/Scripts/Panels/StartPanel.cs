@@ -5,6 +5,7 @@ using ToolBox.Control.Explorer2D;
 using ToolBox.Core;
 using ToolBox.GUI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class StartPanel : Panel
@@ -13,6 +14,8 @@ public class StartPanel : Panel
     public Button quitButton;
 
     private bool inGame;
+
+    private EventSystem eventSystem;
 
 
     // Start is called before the first frame update
@@ -23,6 +26,8 @@ public class StartPanel : Panel
         startButton.onClick.AddListener(OnStart);
         quitButton.onClick.AddListener(OnQuit);
         inGame = false;
+        eventSystem=GameObject.FindObjectOfType<EventSystem>();
+        eventSystem.SetSelectedGameObject(startButton.gameObject);
     }
 
     private void OnStart()

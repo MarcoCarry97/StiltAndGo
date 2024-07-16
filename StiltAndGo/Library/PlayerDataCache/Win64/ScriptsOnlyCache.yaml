@@ -3,8 +3,11 @@ ScriptsOnlyBuild:
     Assembly-CSharp:
     - GameOverPanel
     - GamePanel
+    - JumpButton
+    - LeftMovementButton
     - LifeBar
     - Rectangle
+    - RightMovementButton
     - StartPanel
     - Stilt
     - ToolBox.Control.Explorer2D.CharacterController2D
@@ -14,8 +17,6 @@ ScriptsOnlyBuild:
     - ToolBox.GUI.Utils.PanelController
     Assembly-CSharp.dll:
     - RectGenerator
-    - Rectangle
-    - ToolBox.Control.Explorer2D.CharacterController2D
     - ToolBox.Core.GameInit
     Unity.2D.Animation.Editor.dll:
     - UnityEditor.U2D.Animation.BoneGizmo
@@ -46,11 +47,6 @@ ScriptsOnlyBuild:
     - TMPro.TMP_StyleSheet
     - TMPro.TextMeshPro
     - TMPro.TextMeshProUGUI
-    Unity.TextMeshPro.dll:
-    - TMPro.TMP_FontAsset
-    - TMPro.TMP_Settings
-    - TMPro.TMP_SpriteAsset
-    - TMPro.TMP_StyleSheet
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
@@ -64,9 +60,6 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
     - UnityEngine.UI.VerticalLayoutGroup
-    UnityEngine.UI.dll:
-    - UnityEngine.EventSystems.EventSystem
-    - UnityEngine.EventSystems.StandaloneInputModule
   serializedClasses:
     Unity.TextMeshPro:
     - TMPro.FaceInfo_Legacy
@@ -84,7 +77,9 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Style
     - TMPro.VertexGradient
     UnityEngine.CoreModule:
+    - UnityEngine.Events.ArgumentCache
     - UnityEngine.Events.PersistentCallGroup
+    - UnityEngine.Events.PersistentListenerMode
     - UnityEngine.RectOffset
     UnityEngine.TextCoreFontEngineModule:
     - UnityEngine.TextCore.FaceInfo
@@ -98,7 +93,16 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
     - UnityEngine.UI.Navigation
     - UnityEngine.UI.SpriteState
-  methodsToPreserve: []
+  methodsToPreserve:
+  - assembly: Assembly-CSharp
+    fullTypeName: GamePanel
+    methodName: OnRight
+  - assembly: Assembly-CSharp
+    fullTypeName: GamePanel
+    methodName: OnLeft
+  - assembly: Assembly-CSharp
+    fullTypeName: GamePanel
+    methodName: OnJump
   sceneClasses:
     Assets/Scenes/SampleScene.unity:
     - Class: 1
@@ -132,25 +136,27 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 16620}
+      Script: {instanceID: 16644}
+    - Class: 114
+      Script: {instanceID: 16646}
     - Class: 114
       Script: {instanceID: 16648}
     - Class: 114
-      Script: {instanceID: 16650}
+      Script: {instanceID: 16704}
     - Class: 114
-      Script: {instanceID: 16652}
+      Script: {instanceID: 16726}
     - Class: 114
-      Script: {instanceID: 16708}
+      Script: {instanceID: 16880}
     - Class: 114
-      Script: {instanceID: 16730}
+      Script: {instanceID: 17098}
     - Class: 114
-      Script: {instanceID: 16884}
+      Script: {instanceID: 17500}
     - Class: 114
-      Script: {instanceID: 17102}
+      Script: {instanceID: 17566}
     - Class: 114
-      Script: {instanceID: 17568}
+      Script: {instanceID: 17802}
     - Class: 114
-      Script: {instanceID: 17804}
+      Script: {instanceID: 17828}
     - Class: 114
       Script: {instanceID: 17944}
     - Class: 114
@@ -166,25 +172,29 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 18820}
     - Class: 114
-      Script: {instanceID: 19126}
+      Script: {instanceID: 19038}
     - Class: 114
-      Script: {instanceID: 19366}
+      Script: {instanceID: 19128}
     - Class: 114
-      Script: {instanceID: 19548}
+      Script: {instanceID: 19368}
     - Class: 114
-      Script: {instanceID: 19558}
+      Script: {instanceID: 19550}
     - Class: 114
-      Script: {instanceID: 19608}
+      Script: {instanceID: 19560}
     - Class: 114
-      Script: {instanceID: 20298}
+      Script: {instanceID: 19610}
     - Class: 114
-      Script: {instanceID: 20464}
+      Script: {instanceID: 19884}
     - Class: 114
-      Script: {instanceID: 20466}
+      Script: {instanceID: 20304}
     - Class: 114
-      Script: {instanceID: 20870}
+      Script: {instanceID: 20470}
     - Class: 114
-      Script: {instanceID: 21168}
+      Script: {instanceID: 20472}
+    - Class: 114
+      Script: {instanceID: 20876}
+    - Class: 114
+      Script: {instanceID: 21174}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -206,12 +216,6 @@ ScriptsOnlyBuild:
     - Class: 225
       Script: {instanceID: 0}
   scriptHashData:
-  - hash:
-      serializedVersion: 2
-      Hash: 99ef844d1e8d824233617a442a55f466
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: StartPanel
   - hash:
       serializedVersion: 2
       Hash: d41ab9b5ea92474f9c0a6937a0607ce1
@@ -394,6 +398,12 @@ ScriptsOnlyBuild:
     className: SpriteSkinUpdateHelper
   - hash:
       serializedVersion: 2
+      Hash: 01d8549824e95ec14f896dab4bc50361
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: LeftMovementButton
+  - hash:
+      serializedVersion: 2
       Hash: 0c6de72eaf8c1070da824268c4bfad9d
     assemblyName: Unity.TextMeshPro
     namespaceName: TMPro
@@ -434,6 +444,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp
     namespaceName: ToolBox.Core
     className: GameController
+  - hash:
+      serializedVersion: 2
+      Hash: b934c7f9075c3e293f8197b7b5a980f0
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: JumpButton
   - hash:
       serializedVersion: 2
       Hash: 674f22ab166efb9fbd2bbc5a88542c7e
@@ -658,6 +674,12 @@ ScriptsOnlyBuild:
     className: SpriteShapeController
   - hash:
       serializedVersion: 2
+      Hash: 99ef844d1e8d824233617a442a55f466
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: StartPanel
+  - hash:
+      serializedVersion: 2
       Hash: 8bbce9932f67ad8e7f4eefec87800f94
     assemblyName: Unity.TextMeshPro
     namespaceName: TMPro
@@ -842,6 +864,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline
     namespaceName: UnityEngine.Timeline
     className: ActivationTrack
+  - hash:
+      serializedVersion: 2
+      Hash: cb0261802157ad680b79fbd82c9c40d0
+    assemblyName: Assembly-CSharp
+    namespaceName: 
+    className: RightMovementButton
   - hash:
       serializedVersion: 2
       Hash: e2734bcc7b3e94776ade5d59f54fec1e

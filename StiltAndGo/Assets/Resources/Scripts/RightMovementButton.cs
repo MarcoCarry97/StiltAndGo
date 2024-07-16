@@ -7,8 +7,12 @@ public class RightMovementButton : MonoBehaviour, IPointerDownHandler, IPointerU
 {
     private Vector3 direction;
 
+    private CharacterController2D controller;
+
     private void Start()
     {
+        Stilt stilt = GameObject.FindObjectOfType<Stilt>();
+        controller = stilt.GetComponent<CharacterController2D>();
         direction = Vector3.zero;
     }
 
@@ -16,17 +20,18 @@ public class RightMovementButton : MonoBehaviour, IPointerDownHandler, IPointerU
     {
         Stilt stilt = GameObject.FindObjectOfType<Stilt>();
         CharacterController2D controller = stilt.GetComponent<CharacterController2D>();
-        controller.Move(direction);
+        //controller.Move(direction);
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        direction = Vector3.right;
+        
+        controller.Move(Vector3.right);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        direction = Vector3.zero;
+        controller.Move(Vector3.zero);
     }
 
 

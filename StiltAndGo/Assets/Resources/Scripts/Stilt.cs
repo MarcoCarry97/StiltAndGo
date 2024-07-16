@@ -40,14 +40,14 @@ public class Stilt : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    /*private void FixedUpdate()
     {
         if(_state == StiltState.Ground)
         {
             //_rigidBody.AddForce(Vector3.up * vertSpeed*_multiplier);
             _state=StiltState.Air;
         }
-    }
+    }*/
 
     private void _GroundState()
     {
@@ -55,6 +55,7 @@ public class Stilt : MonoBehaviour
         //else _multiplier = 1;
         //highJump = false;
         _controller.Jump(true);
+       // _state = StiltState.Air;
     }
 
     private void _AirState()
@@ -65,7 +66,7 @@ public class Stilt : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.tag.Equals("Rectangle"))
+        if (collision.collider.CompareTag("Rectangle"))
         {
             _state = StiltState.Ground;
             RectGenerator rectGen=GameObject.FindObjectOfType<RectGenerator>();
@@ -76,7 +77,7 @@ public class Stilt : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.collider.tag.Equals("Rectangle"))
+        if (collision.collider.CompareTag("Rectangle"))
         {
            _state= StiltState.Air;
         }
@@ -86,9 +87,14 @@ public class Stilt : MonoBehaviour
     {
         if (collision.tag.Equals("LimitLeft"))
         {
-            Destroy(this.gameObject);
-            GameController.Instance.Gui.ActivePanel("GameOverPanel");
+            ShowGameOver();
         }
+    }
+
+    private void ShowGameOver()
+    {
+        Destroy(this.gameObject);
+        GameController.Instance.Gui.ActivePanel("GameOverPanel");
     }
 
 }
